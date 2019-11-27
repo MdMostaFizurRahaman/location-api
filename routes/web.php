@@ -16,7 +16,7 @@ Route::get('/', function () {
 });
 
 
-Route::group(['middleware' =>['insert_response']], function(){
+Route::group(['middleware' =>['request_logger']], function(){
     Route::get('/getLocation','LocationController@getLocation');
 });
 

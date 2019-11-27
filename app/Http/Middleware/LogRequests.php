@@ -23,16 +23,21 @@ class LogRequests
 
     protected function log($request,$response)
     {
-        $duration = $request->end - $request->start;
-        $url = $request->fullUrl();
-        $method = $request->getMethod();
-        $ip = $request->getClientIp();
 
-        $log = 
-        // "{$ip}: {$method}@{$url} - {$duration}ms \n".
-        // "Request : {[$request->all()]} \n".
-        "{$response->getContent()} \n";
-
-        Log::info($log);
+        $data = json_decode($response->getContent());
+        if(!empty($data)){
+            $city = $data->city;
+            $country = $data->country; 
+            $countryCode = $data->countryCode; 
+            $isp = $data->isp; 
+            $org = $data->org; 
+            $query = $data->query; 
+            $region = $data->region; 
+            $timezone = $data->timezone; 
+    
+            $log = "{$city},{$country},{$countryCode},{$isp}, {$org},{$query},{$region},{$timezone}";
+    
+            Log::channel('daily')->info($log);
+        }
     }
 }

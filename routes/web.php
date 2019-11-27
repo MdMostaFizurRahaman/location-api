@@ -21,6 +21,8 @@ Route::group(['middleware' =>['request_logger']], function(){
     Route::get('/getLocation','LocationController@getLocation');
 });
 
+Route::get('/readLog','LocationController@readLog');
+
 
 Route::get('logs', '\Rap2hpoutre\LaravelLogViewer\LogViewerController@index');
 

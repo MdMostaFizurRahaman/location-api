@@ -10,11 +10,10 @@ class LocationController extends Controller
     {
         $ip =  $request->ip();
         $key = "gYCHqT7Al60y1pw";
-        // $ip = "92.98.57.182";
+        // $ip = "92.98.57.182";   
         // $ip = "103.92.154.254";
-
         $data = json_decode(file_get_contents("https://pro.ip-api.com//json/$ip?key=$key"));
-
+    
 
         if(isset($data->country) & isset($data->city) & isset($data->countryCode)){
             return response()->json($data);

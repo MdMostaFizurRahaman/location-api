@@ -16,26 +16,26 @@ class LocationController extends Controller
         try {
             $data = json_decode(file_get_contents("https://pro.ip-api.com//json/$ip?key=$key"));
         } catch (\Throwable $th) {
-            Log::channel('stack')->warning("ip-api Failed");
+            Log::channel('stack')->warning("warning,ip-api Failed");
         }
     
 
         if(isset($data->country) & isset($data->city) & isset($data->countryCode)){
             return response()->json($data);
         }else{
-            Log::channel('stack')->warning("ip-api Failed, No data found which needed.");
+            Log::channel('stack')->warning("warning, ip-api Failed, No data found which needed.");
             $key = "MVz6oqMIVZmrSekBA52O";
             
             try {
                 $data = json_decode(file_get_contents("http://extreme-ip-lookup.com/json/$ip?key=$key"));
             } catch (\Throwable $th) {
-                Log::channel('stack')->error("Both Failed");
+                Log::channel('stack')->error("error, Both Failed");
             }
 
             if(isset($data->country) & isset($data->city) & isset($data->countryCode)){
                 return response()->json($data);
             }else{
-                Log::channel('stack')->error("Both Failed");
+                Log::channel('stack')->error("error, Both Failed");
             } 
         }
 

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class LocationController extends Controller
 {
@@ -12,15 +13,30 @@ class LocationController extends Controller
         $key = "gYCHqT7Al60y1pw";
         // $ip = "92.98.57.182";   
         // $ip = "103.92.154.254";
-        $data = json_decode(file_get_contents("https://pro.ip-api.com//json/$ip?key=$key"));
+        try {
+            $data = json_decode(file_get_contents("https://pro.ip-api.com//json/$ip?key=$key"));
+        } catch (\Throwable $th) {
+            Log::channel('stack')->warning("ip-api Failed");
+        }
     
 
         if(isset($data->country) & isset($data->city) & isset($data->countryCode)){
             return response()->json($data);
         }else{
+            Log::channel('stack')->warning("ip-api Failed, No data found which needed.");
             $key = "MVz6oqMIVZmrSekBA52O";
-            $data = json_decode(file_get_contents("http://extreme-ip-lookup.com/json/$ip?key=$key"));
-            return response()->json($data);
+            
+            try {
+                $data = json_decode(file_get_contents("http://extreme-ip-lookup.com/json/$ip?key=$key"));
+            } catch (\Throwable $th) {
+                Log::channel('stack')->error("Both Failed");
+            }
+
+            if(isset($data->country) & isset($data->city) & isset($data->countryCode)){
+                return response()->json($data);
+            }else{
+                Log::channel('stack')->error("Both Failed");
+            } 
         }
 
     }

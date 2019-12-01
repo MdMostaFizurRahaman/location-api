@@ -26,7 +26,7 @@ class LogRequests
     {
 
         $data = json_decode($response->getContent());
-        if(!empty($data)){
+        if(isset($data->country) & isset($data->city) & isset($data->isp)){
             $city = $data->city;
             $country = $data->country; 
             $countryCode = $data->countryCode; 
@@ -37,9 +37,7 @@ class LogRequests
             $timezone = $data->timezone; 
             $provider = isset($data->businessName) ? 'extreme' : 'ip-api';
             $logTime = Carbon::now();
-    
             $log = "{$city},{$country},{$countryCode},{$isp}, {$org},{$query},{$region},{$timezone},{$provider},{$logTime}";
-    
             Log::channel('daily')->info($log);
         }
     }

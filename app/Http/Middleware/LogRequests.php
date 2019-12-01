@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use Carbon\Carbon;
 use Closure;
 use Illuminate\Support\Facades\Log;
 
@@ -35,8 +36,9 @@ class LogRequests
             $region = $data->region; 
             $timezone = $data->timezone; 
             $provider = isset($data->businessName) ? 'extreme' : 'ip-api';
+            $logTime = Carbon::now();
     
-            $log = "{$city},{$country},{$countryCode},{$isp}, {$org},{$query},{$region},{$timezone},{$provider}";
+            $log = "{$city},{$country},{$countryCode},{$isp}, {$org},{$query},{$region},{$timezone},{$provider},{$logTime}";
     
             Log::channel('daily')->info($log);
         }

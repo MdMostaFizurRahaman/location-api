@@ -34,8 +34,9 @@ class LogRequests
             $query = $data->query; 
             $region = $data->region; 
             $timezone = $data->timezone; 
+            $provider = isset($data->businessName) ? 'extreme' : 'ip-api';
     
-            $log = "{$city},{$country},{$countryCode},{$isp}, {$org},{$query},{$region},{$timezone}";
+            $log = "{$city},{$country},{$countryCode},{$isp}, {$org},{$query},{$region},{$timezone},{$provider}";
     
             Log::channel('daily')->info($log);
         }

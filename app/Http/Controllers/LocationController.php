@@ -9,33 +9,33 @@ class LocationController extends Controller
 {
     public function getLocation(Request $request)
     {
-        $ip =  $request->ip();
+        // $ip =  $request->ip();
         $key = "gYCHqT7Al60y1pw";
-        // $ip = "92.98.57.182";   
+        $ip = "92.98.57.182";   
         // $ip = "103.92.154.254";
         try {
             $data = json_decode(file_get_contents("https://pro.ip-api.com//json/$ip?key=$key"));
         } catch (\Throwable $th) {
-            Log::channel('stack')->warning("warning,ip-api Failed");
+            Log::channel('stack')->warning("warning;ip-api Failed");
         }
     
 
-        if(isset($data->country) & isset($data->city) & isset($data->countryCode)){
+        if(!empty($data->country) & !empty($data->city) & !empty($data->countryCode)){
             return response()->json($data);
         }else{
-            Log::channel('stack')->warning("warning, ip-api Failed, No data found which needed.");
+            Log::channel('stack')->warning("warning;ip-api Failed;No data found which needed");
             $key = "MVz6oqMIVZmrSekBA52O";
             
             try {
                 $data = json_decode(file_get_contents("http://extreme-ip-lookup.com/json/$ip?key=$key"));
             } catch (\Throwable $th) {
-                Log::channel('stack')->error("error, Both Failed");
+                Log::channel('stack')->error("error;Extreme Failed");
             }
 
-            if(isset($data->country) & isset($data->city) & isset($data->countryCode)){
+            if(!empty($data->country) & !empty($data->city) & !empty($data->countryCode)){
                 return response()->json($data);
             }else{
-                Log::channel('stack')->error("error, Both Failed");
+                Log::channel('stack')->error("error;Extreme Failed");
             } 
         }
 

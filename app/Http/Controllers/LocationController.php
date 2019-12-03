@@ -56,6 +56,8 @@ class LocationController extends Controller
     
 
         if(!empty($data->country) & !empty($data->city) & !empty($data->countryCode)){
+            $request = $request->getContent();
+            $request = json_decode($request);
             $data->app_name = $request->app_name;
             $data->device_id = $request->device_id;
             $data->app_version = $request->app_version;
@@ -71,6 +73,8 @@ class LocationController extends Controller
             }
 
             if(!empty($data->country) & !empty($data->city) & !empty($data->countryCode)){
+                $request = $request->getContent();
+                $request = json_decode($request);
                 $data->app_name = $request->app_name;
                 $data->device_id = $request->device_id;
                 $data->app_version = $request->app_version;

@@ -58,9 +58,9 @@ class LocationController extends Controller
         if(!empty($data->country) & !empty($data->city) & !empty($data->countryCode)){
             $request = $request->getContent();
             $request = json_decode($request);
-            $data->app_name = $request->app_name;
-            $data->device_id = $request->device_id;
-            $data->app_version = $request->app_version;
+            $data->app_name = $request;
+            // $data->device_id = $request->device_id;
+            // $data->app_version = $request->app_version;
             return response()->json($data);
         }else{
             Log::channel('stack')->warning("warning;ip-api Failed;No data found which needed");

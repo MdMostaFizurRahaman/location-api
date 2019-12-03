@@ -56,7 +56,10 @@ class LocationController extends Controller
     
 
         if(!empty($data->country) & !empty($data->city) & !empty($data->countryCode)){
-            $data->app_name = $request->app_name;
+            $rawdata = file_get_contents("php://input");
+            // Let's say we got JSON
+            $decoded = json_decode($rawdata);
+            $data->app_name = $decoded;
             $data->device_id = $request->device_id;
             $data->app_version = $request->app_version;
             return response()->json($data);

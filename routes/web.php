@@ -14,10 +14,11 @@
 
 Route::group(['middleware' =>['request_logger']], function(){
     Route::get('/getLocation','LocationController@getLocation');
+    Route::post('/getLocation','LocationController@getLocationPost');
 });
 
 
-
+Route::get('/post', "LocationController@post");
 
 Auth::routes(['register' => false]);
 

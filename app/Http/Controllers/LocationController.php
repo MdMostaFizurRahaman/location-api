@@ -41,32 +41,48 @@ class LocationController extends Controller
 
     }
 
-
-    public function readLog()
+    public function getLocationPost (Request $request)
     {
-        $file =null;
+        $ip =  $request->ip();
+        $key = "gYCHqT7Al60y1pw";
+        // $ip = "92.98.57.182";   
+        // $ip = "103.92.154.254";
         try {
-            $file = fopen(storage_path('logs/api/laravel-2019-11-27.log'),"r") or die("Error");
+            $data = json_decode(file_get_contents("https://pro.ip-api.com//json/$ip?key=$key"));
+            
         } catch (\Throwable $th) {
-            //throw $th;
+            Log::channel('stack')->warning("warning;ip-api Failed");
         }
-
-        $pattern= '/\[\d{4}-\d{2}-\d{2}\s\d{2}:\d{2}:\d{2}\]\s\w*.INFO:/';
-
-        if($file){  
-            while(($row = fgets($file)) != false) {
-                
-                $row = preg_replace($pattern, "", $row);
-
-                $cols = explode(',', $row);
     
-                foreach($cols as $col){
-                    echo "<li>". $col."</li>";
-                }
-            }
-        }else{
-            return response("0", 404);  
-        }
 
+        if(!empty($data->country) & !empty($data->city) & !empty($data->countryCode)){
+            $data->app_name = $request->app_name;
+            $data->device_id = $request->device_id;
+            $data->app_version = $request->app_version;
+            return response()->json($data);
+        }else{
+            Log::channel('stack')->warning("warning;ip-api Failed;No data found which needed");
+            $key = "MVz6oqMIVZmrSekBA52O";
+            
+            try {
+                $data = json_decode(file_get_contents("http://extreme-ip-lookup.com/json/$ip?key=$key"));
+            } catch (\Throwable $th) {
+                Log::channel('stack')->error("error;Extreme Failed");
+            }
+
+            if(!empty($data->country) & !empty($data->city) & !empty($data->countryCode)){
+                $data->app_name = $request->app_name;
+                $data->device_id = $request->device_id;
+                $data->app_version = $request->app_version;
+                return response()->json($data);
+            }else{
+                Log::channel('stack')->error("error;Extreme Failed");
+            } 
+        }
+    }
+
+    public function post()
+    {
+        return view('post');
     }
 }

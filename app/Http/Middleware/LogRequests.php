@@ -37,7 +37,10 @@ class LogRequests
             $timezone = $data->timezone; 
             $provider = !empty($data->businessName) ? 'extreme' : 'ip-api';
             $logTime = Carbon::now();
-            $log = "{$city};{$country};{$countryCode};{$isp};{$org};{$query};{$region};{$timezone};{$provider};{$logTime}";
+            $app_name = !empty($data->app_name) ? $data->app_name : '';
+            $device_id = !empty($data->device_id) ? $data->device_id : '';
+            $app_version = !empty($data->app_version) ? $data->app_version : '';
+            $log = "{$city};{$country};{$countryCode};{$isp};{$org};{$query};{$region};{$timezone};{$provider};{$logTime};{$app_name};{$device_id};{$app_version}";
             Log::channel('daily')->info($log);
         }
     }

@@ -57,11 +57,10 @@ class LocationController extends Controller
 
         if(!empty($data->country) & !empty($data->city) & !empty($data->countryCode)){
             $rawdata = file_get_contents("php://input");
-            // Let's say we got JSON
             $decoded = json_decode($rawdata);
-            $data->app_name = $decoded;
-            $data->device_id = $request->device_id;
-            $data->app_version = $request->app_version;
+            $data->app_name = $decoded->app_name;
+            $data->device_id = $decoded->device_id;
+            $data->app_version = $decoded->app_version;
             return response()->json($data);
         }else{
             Log::channel('stack')->warning("warning;ip-api Failed;No data found which needed");
@@ -74,9 +73,11 @@ class LocationController extends Controller
             }
 
             if(!empty($data->country) & !empty($data->city) & !empty($data->countryCode)){
-                $data->app_name = $request->app_name;
-                $data->device_id = $request->device_id;
-                $data->app_version = $request->app_version;
+                $rawdata = file_get_contents("php://input");
+                $decoded = json_decode($rawdata);
+                $data->app_name = $decoded->app_name;
+                $data->device_id = $decoded->device_id;
+                $data->app_version = $decoded->app_version;
                 return response()->json($data);
             }else{
                 Log::channel('stack')->error("error;Extreme Failed");
